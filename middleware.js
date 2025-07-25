@@ -22,7 +22,7 @@ export default withAuth({
 
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(png|jpg|jpeg|svg|webp|gif|css|js|pdf|ttf|woff2|mp4)$).*)",
-  ],
+  matcher: ["/((?!api|_next|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|webp|gif|ico|css|js|pdf|ttf|woff|woff2|eot|mp4|webm)).*)"],
 };
+;
+
