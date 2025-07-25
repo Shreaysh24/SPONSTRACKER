@@ -5,6 +5,8 @@ import Header from "./components/edges/Header";
 import Footer from "./components/edges/Footer";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 
 
@@ -13,11 +15,16 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { data: session } = useSession();
-  console.log('Session:', session);
+  const router = useRouter();
 
 
-
-
+const handleContactClick = (email) => {
+  if (!session) {
+    signIn(); // Redirects to login page
+  } else {
+    router.push(`/chats?user=${email}`);
+  }
+};
 
   useEffect(() => {
     fetchEvents(2);
@@ -124,7 +131,7 @@ export default function Home() {
                   <div className="mt-8 flex justify-end">
                     <button
                       className=" w-full bg-gradient-to-r from-[#7c4dff] to-[#9575cd] text-white font-bold py-2 px-6 rounded-xl shadow-lg hover:from-[#6a3fd8] hover:to-[#7e57c2] transition text-lg"
-                      onClick={() => window.location = `mailto:contact@sponstracker.com?subject=Enquiry about ${e.title}`}
+                      onClick={() => handleContactClick(e.userEmail)}
                     >
                       Contact
                     </button>

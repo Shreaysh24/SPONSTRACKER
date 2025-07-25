@@ -3,7 +3,7 @@ import React from 'react'
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Footer from '../components/edges/Footer';
-import { Mail,Phone } from 'lucide-react';
+import { Mail, Phone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const AllSponsor = () => {
@@ -48,8 +48,9 @@ const AllSponsor = () => {
           {sponsors.map((sponsor) => (
             <div
               key={sponsor._id}
-              className="flex flex-col md:flex-row bg-gradient-to-br from-[#3e1087ba] to-[#3a2d4d] rounded-2xl shadow-2xl overflow-hidden border-0 hover:scale-[1.02] hover:shadow-3xl transition duration-300 text-white"
+              className="flex flex-col md:flex-row bg-gradient-to-br from-[#3e1087ba] to-[#3a2d4d] rounded-2xl shadow-2xl overflow-hidden border-0 hover:scale-[1.02] hover:shadow-3xl transition duration-300 text-white mx-4 md:mx-0 my-4"
             >
+
               <div className="md:w-1/2 rounded-br-3xl aspect-video bg-[#00000065] flex items-center justify-center text-4xl font-bold">
                 {sponsor.companyDomain}
               </div>
@@ -71,11 +72,11 @@ const AllSponsor = () => {
                       <p>{new Date(sponsor.createdAt).toLocaleDateString()}</p>
                     </div>
                     <div className="flex flex-row gap-2 items-center">
-                      <Mail className='text-black' />
+                      <Mail className= ' w-[25] h-[25] text-black' />
                       <p>{sponsor.email}</p>
                     </div>
                     <div className="flex flex-row gap-2 items-center">
-                      <Phone className='text-black'/>
+                      <Phone className='text-black' />
                       <p>{sponsor.contactNumber}</p>
                     </div>
                   </div>
