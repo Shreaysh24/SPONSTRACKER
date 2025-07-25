@@ -25,7 +25,7 @@ export default function Header() {
   }, [session]);
 
   return (
-    <header className="w-full bg-gradient-to-r top-0 fixed z-10 from-[#2d253a] to-[#3a2d4d] shadow-lg py-3 px-6 flex items-center justify-between">
+    <header className="w-full bg-gradient-to-r top-0 fixed z-20 from-[#2d253a] to-[#3a2d4d] shadow-lg py-3 px-6 flex items-center justify-between">
       {/* Left: Logo */}
       <div className="flex items-center gap-3">
         <Link href="/" className="flex items-center gap-3">
