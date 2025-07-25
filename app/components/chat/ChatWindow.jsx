@@ -1,13 +1,14 @@
 // "use client";
 // import { useEffect, useState, useRef } from "react";
 // import { useSession } from "next-auth/react";
+// import { LogOut} from "lucide-react";
 // import {
 //   initPubNub,
 //   sendMessagePubNub,
 //   subscribeToChannel,
 // } from "@/lib/usePubNub";
 
-// export default function ChatWindow({ selectedUser }) {
+// export default function ChatWindow({ selectedUser, onBack }) {
 //   const [messages, setMessages] = useState([]);
 //   const [input, setInput] = useState("");
 //   const messagesEndRef = useRef(null);
@@ -18,17 +19,14 @@
 //   const receiver = selectedUser?.email;
 //   const channel = sender && receiver ? [sender, receiver].sort().join("_") : "";
 
-//   // 1. Initialize PubNub
 //   useEffect(() => {
 //     if (sender) initPubNub(sender);
 //   }, [sender]);
 
-//   // 2. Scroll to latest message
 //   useEffect(() => {
 //     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 //   }, [messages]);
 
-//   // 3. Fetch old chat
 //   useEffect(() => {
 //     if (!sender || !receiver) return;
 
@@ -45,7 +43,6 @@
 //     fetchChat();
 //   }, [sender, receiver]);
 
-//   // 4. Subscribe for new messages
 //   useEffect(() => {
 //     if (!sender || !channel) return;
 
@@ -58,7 +55,6 @@
 //     };
 //   }, [channel, sender]);
 
-//   // 5. Send message
 //   const handleSend = async () => {
 //     if (!input.trim()) return;
 
@@ -84,18 +80,28 @@
 //       console.error("Error sending message:", error);
 //     }
 //   };
-//   const initials = selectedUser?.name || selectedUser?.email?.[0].toUpperCase() || "U";
+
+//   const initials = selectedUser?.name || selectedUser?.email?.[0]?.toUpperCase() || "U";
 
 //   return (
-//     <div className=" flex-1 flex flex-col h-[100%]">
-//       {/* TOPBAR */
-//       }
-      
+//     <div className="flex-1 flex flex-col h-full">
+//       {/* TOP BAR */}
 //       <div className="mt-14 bg-[#c7baddca] text-white p-4 shadow flex items-center justify-between">
-//         <h2 className="text-lg font-semibold bg-[#d690e5ed] rounded-full w-10 h-10 flex items-center justify-center">
-//           {initials}
-//         </h2>
-//         {/* Optional: Add call or settings icons */}
+//         <div className="flex items-center space-x-4">
+//           {/* Back Button (Only on mobile) */}
+//           {onBack && (
+//             <button
+//               onClick={onBack}
+//               className="sm:hidden bg-transparent text-black px-3 py-1 rounded"
+//             >
+//                <LogOut />
+//             </button>
+//           )}
+//           <div className="text-lg font-semibold bg-[#d690e5ed] rounded-full w-10 h-10 flex items-center justify-center">
+//             {initials}
+//           </div>
+//           <span className="text-sm font-medium text-black ml-2">{selectedUser?.name}</span>
+//         </div>
 //       </div>
 
 //       {/* MESSAGES */}
@@ -143,10 +149,12 @@
 //     </div>
 //   );
 // }
+
 "use client";
+
 import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
-import { LogOut} from "lucide-react";
+import { LogOut } from "lucide-react";
 import {
   initPubNub,
   sendMessagePubNub,
@@ -164,14 +172,17 @@ export default function ChatWindow({ selectedUser, onBack }) {
   const receiver = selectedUser?.email;
   const channel = sender && receiver ? [sender, receiver].sort().join("_") : "";
 
+  // 1. Init PubNub
   useEffect(() => {
     if (sender) initPubNub(sender);
   }, [sender]);
 
+  // 2. Scroll to latest message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // 3. Load existing chat
   useEffect(() => {
     if (!sender || !receiver) return;
 
@@ -188,6 +199,7 @@ export default function ChatWindow({ selectedUser, onBack }) {
     fetchChat();
   }, [sender, receiver]);
 
+  // 4. Realtime messages
   useEffect(() => {
     if (!sender || !channel) return;
 
@@ -200,6 +212,7 @@ export default function ChatWindow({ selectedUser, onBack }) {
     };
   }, [channel, sender]);
 
+  // 5. Send message
   const handleSend = async () => {
     if (!input.trim()) return;
 
@@ -226,30 +239,34 @@ export default function ChatWindow({ selectedUser, onBack }) {
     }
   };
 
-  const initials = selectedUser?.name || selectedUser?.email?.[0]?.toUpperCase() || "U";
+  const initials =
+    selectedUser?.name?.[0]?.toUpperCase() ||
+    selectedUser?.email?.[0]?.toUpperCase() ||
+    "U";
 
   return (
-    <div className="flex-1 flex flex-col h-full">
-      {/* TOP BAR */}
-      <div className="mt-14 bg-[#c7baddca] text-white p-4 shadow flex items-center justify-between">
+    <div className="flex flex-col h-[100dvh] bg-white">
+      {/* Header */}
+      <div className="mt-14 bg-[#c7baddca] p-4 shadow flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          {/* Back Button (Only on mobile) */}
           {onBack && (
             <button
               onClick={onBack}
               className="sm:hidden bg-transparent text-black px-3 py-1 rounded"
             >
-               <LogOut />
+              <LogOut />
             </button>
           )}
-          <div className="text-lg font-semibold bg-[#d690e5ed] rounded-full w-10 h-10 flex items-center justify-center">
+          <div className="text-lg font-semibold bg-[#d690e5ed] rounded-full w-10 h-10 flex items-center justify-center text-black">
             {initials}
           </div>
-          <span className="text-sm font-medium text-black ml-2">{selectedUser?.name}</span>
+          <span className="text-sm font-medium text-black">
+            {selectedUser?.name || selectedUser?.email}
+          </span>
         </div>
       </div>
 
-      {/* MESSAGES */}
+      {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto p-4 bg-gray-100">
         {messages.length > 0 ? (
           messages.map((msg, idx) => (
@@ -260,7 +277,7 @@ export default function ChatWindow({ selectedUser, onBack }) {
               }`}
             >
               <span
-                className={`inline-block px-4 py-2 text-sm rounded-lg ${
+                className={`inline-block px-4 py-2 text-sm rounded-lg max-w-[70%] break-words ${
                   msg.sender === sender
                     ? "bg-[#3a2d4d] text-white"
                     : "bg-[#ad9cc8b5] text-gray-800 border"
@@ -276,8 +293,8 @@ export default function ChatWindow({ selectedUser, onBack }) {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* INPUT */}
-      <div className="p-4 bg-white border-t flex items-center">
+      {/* Input */}
+      <div className="p-4 bg-white border-t flex items-center sticky bottom-0 z-10">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -294,4 +311,3 @@ export default function ChatWindow({ selectedUser, onBack }) {
     </div>
   );
 }
-
