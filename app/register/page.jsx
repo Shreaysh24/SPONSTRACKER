@@ -56,7 +56,7 @@ function Registerpage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#8c6fb8b2] p-4">
-      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-lg p-6 md:p-10 border-t-4 border-[#d1c7e2]">
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg p-6 md:p-10 border-t-4 border-[#d1c7e2]">
         <h1 className="text-3xl font-bold text-[#364F6B] text-center mb-6">Registration Page</h1>
         <form onSubmit={handleSubmit} className="text-black">
           <div className="flex flex-col md:flex-row gap-8">
@@ -67,7 +67,7 @@ function Registerpage() {
                   id="role"
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  className="flex-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#d1c7e2] text-[#364F6B]"
+                  className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#d1c7e2] text-[#364F6B]"
                 >
                   <option value="User">User</option>
                   <option value="Manager">Manager</option>
@@ -102,7 +102,7 @@ function Registerpage() {
           <div className="flex justify-center mt-8">
             <button
               type="submit"
-              className="w-2/3 md:w-1/3 bg-[#8c6fb8e0] hover:bg-[#8c6fb8] text-black font-semibold py-3 px-4 rounded-lg transition-all duration-300 shadow-md"
+              className="w-full md:w-1/3 bg-[#8c6fb8e0] hover:bg-[#8c6fb8] text-black font-semibold py-3 px-4 rounded-lg transition-all duration-300 shadow-md"
             >
               Register
             </button>
@@ -120,11 +120,11 @@ function Registerpage() {
 // Reusable Components
 function FormRow({ label, htmlFor, children }) {
   return (
-    <div className="flex flex-row items-center gap-4">
-      <label className="w-36 text-right font-semibold text-[#364F6B]" htmlFor={htmlFor}>
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
+      <label className="w-full sm:w-36 font-semibold text-[#364F6B]" htmlFor={htmlFor}>
         {label}
       </label>
-      {children}
+      <div className="w-full">{children}</div>
     </div>
   );
 }
@@ -139,7 +139,7 @@ function FormInput({ id, label, value, setValue, type = "text" }) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         required
-        className="flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3FC1C9]"
+        className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3FC1C9]"
       />
     </FormRow>
   );
