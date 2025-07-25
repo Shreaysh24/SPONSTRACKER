@@ -14,9 +14,9 @@ export default function Home() {
   const [error, setError] = useState(null);
   const { data: session } = useSession();
   console.log('Session:', session);
-  
 
-  
+
+
 
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export default function Home() {
                     </video>
                   ) : (
                     e.videoUrl && (
-                      <img
+                      <Image
                         src={e.videoUrl}
                         alt="Event Visual"
                         className="w-full h-full object-cover rounded-none"
@@ -172,8 +172,9 @@ export default function Home() {
           <div className="max-w-3xl mx-auto text-center px-4">
             <svg className="mx-auto mb-6" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17a4 4 0 01-4-4V7a4 4 0 014-4h3a4 4 0 014 4v6a4 4 0 01-4 4H7zm10 0a4 4 0 01-4-4V7a4 4 0 014-4h3a4 4 0 014 4v6a4 4 0 01-4 4h-3z" /></svg>
             <p className="text-2xl md:text-3xl text-white font-semibold mb-6 italic">
-              "SponsTracker made our event a breeze! The platform was intuitive, the support was fantastic, and our attendees loved the experience. Highly recommended for any organization looking to elevate their events."
+              &quot;SponsTracker made our event a breeze! The platform was intuitive, the support was fantastic, and our attendees loved the experience. Highly recommended for any organization looking to elevate their events.&quot;
             </p>
+
             <div className="flex flex-col items-center gap-2">
               <Image src="/home/check.png" alt="User" width={56} height={56} className="rounded-full border-4 border-[#7c4dff]" />
               <span className="text-lg text-white font-bold">Priya Sharma</span>
