@@ -3,9 +3,21 @@ import dbConnect from "@/lib/db";
 import { Manager } from "@/Models/Manager";
 import { User } from "@/Models/User";
 
+
 export async function POST(request) {
     try {
         const body = await request.json();
+        // const chatClient = StreamChat.getInstance("{{ api_key }}", {
+        //     timeout: 6000,
+        // });
+        // chatClient.connectUser(
+        //     {
+        //         id: "john",
+        //         name: "John Doe",
+        //         image: "https://getstream.io/random_svg/?name=John",
+        //     },
+        //     "{{ chat_user_token }}",
+        // );
         const { name, email, password, role } = body;
         if (!name || !email || !password || !role) {
             return NextResponse.json({ error: "All fields are required" }, { status: 400 });
@@ -43,6 +55,12 @@ export async function POST(request) {
             });
             await newUser.save();
         }
+
+
+
+      
+
+
         return NextResponse.json({ message: "User registered successfully" }, { status: 201 });
     } catch (error) {
         console.error("Registration error:", error);

@@ -1,25 +1,20 @@
 import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
 
 export default withAuth({
+  pages: {
+    signIn: "/", // 👈 Redirect here instead of /login
+  },
   callbacks: {
     authorized({ req, token }) {
       const { pathname } = req.nextUrl;
-
+      const publicPaths = ["/api/auth", "/login", "/register", "/","/api/video"];
+      const isPublic = publicPaths.some((path) =>
+        pathname === path || pathname.startsWith(path + "/")
+      );
       // Public routes
-      if (
-        pathname.startsWith("/api/auth") ||
-        pathname.startsWith("/login") ||
-        pathname.startsWith("/register")
-      ) {
+      if (isPublic) {
         return true;
       }
-
-      // Protected routes
-      if (pathname.startsWith("/") || pathname.startsWith("/events")) {
-        return !!token; // Allow only if authenticated
-      }
-
       return !!token; // default fallback
     },
   },
@@ -28,13 +23,7 @@ export default withAuth({
 
 export const config = {
     matcher: [
-        /*
-         * Match all request paths except:
-         * - _next/static (static files)
-         * - _next/image (image optimization files)
-         * - favicon.ico (favicon file)
-         * - public folder
-         */
+  
         "/((?!_next/static|_next/image|favicon.ico|public/).*)",
     ],
 };

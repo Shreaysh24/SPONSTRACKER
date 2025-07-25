@@ -3,99 +3,146 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 function Registerpage() {
-    const [password, setpassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [role, setRole] = useState("User");
-    const [email, setEmail] = useState("");
-    const [contactNumber, setContactNumber] = useState("");
-    const [companyName, setCompanyName] = useState("");
-    const [companyDomain, setCompanyDomain] = useState("");
-    const [amount, setAmount] = useState("");
-    const [name, setName] = useState("");
-    const router = useRouter();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("User");
+  const [email, setEmail] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [companyDomain, setCompanyDomain] = useState("");
+  const [amount, setAmount] = useState("");
+  const [name, setName] = useState("");
+  const router = useRouter();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (password !== confirmPassword) {
-            alert("Passwords do not match");
-            return;
-        }
-        try {
-            const payload =
-                role === "User"
-                    ? { name, email, password, role }
-                    : { name, email, password, role, companyName, companyDomain, contactNumber, amount };
-
-            const response = await fetch('/api/auth/registration', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name, email, password, role }),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                if (data.error === "User already exists") {
-                    if (confirm("An account with this email already exists. Do you want to log in instead?")) {
-                        router.push('/login');
-                    } else {
-                        throw new Error(data.message || 'Registration failed due to server error.');
-                    }
-
-                }
-
-                console.log("Registration response:", data);
-                alert("Registration successful! Please log in.");
-                router.push('/login');
-
-            }
-        } catch (error) {
-            console.error("Registration error:", error);
-            alert(error.message || "Something went wrong. Please try again.");
-        }
-
-
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
     }
 
+    try {
+      const payload =
+        role === "User"
+          ? { name, email, password, role }
+          : { name, email, password, role, companyName, companyDomain, contactNumber, amount };
 
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-[#F5F5F5] p-4">
-            <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-8 border-t-4 border-[#3FC1C9]">
-                <h1 className="text-3xl font-bold text-[#364F6B] text-center mb-6">Registration Page</h1>
+      const response = await fetch('/api/auth/registration', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.error === "User already exists") {
+          if (confirm("An account with this email already exists. Do you want to log in instead?")) {
+            router.push('/login');
+          } else {
+            throw new Error(data.message || 'Registration failed due to server error.');
+          }
+        }
+        return;
+      }
+
+      alert("Registration successful! Please log in.");
+      router.push('/login');
+    } catch (error) {
+      console.error("Registration error:", error);
+      alert(error.message || "Something went wrong. Please try again.");
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#8c6fb8b2] p-4">
+      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-lg p-6 md:p-10 border-t-4 border-[#d1c7e2]">
+        <h1 className="text-3xl font-bold text-[#364F6B] text-center mb-6">Registration Page</h1>
+        <form onSubmit={handleSubmit} className="text-black">
+          <div className="flex flex-col md:flex-row gap-8">
+            {/* Left Column */}
+            <div className="flex-1 space-y-4">
+              <FormRow label="Role:" htmlFor="role">
                 <select
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    className="w-full p-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#3FC1C9] text-[#364F6B]"
+                  id="role"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="flex-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#d1c7e2] text-[#364F6B]"
                 >
-                    <option value="User">User</option>
-                    <option value="Manager">Manager</option>
+                  <option value="User">User</option>
+                  <option value="Manager">Manager</option>
                 </select>
-                <form onSubmit={handleSubmit} className="space-y-4 text-black">
-                    <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3FC1C9]" />
-                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3FC1C9]" />
-                    <input type="password" placeholder="Password" value={password} onChange={(e) => setpassword(e.target.value)} required className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3FC1C9]" />
-                    <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3FC1C9]" />
-                    {role === "Manager" && (
-                        <>
-                            <input type="text" placeholder="Company Name" value={companyName} onChange={(e) => setCompanyName(e.target.value)} required className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3FC1C9]" />
-                            <input type="text" placeholder="Company Domain" value={companyDomain} onChange={(e) => setCompanyDomain(e.target.value)} required className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3FC1C9]" />
-                            <input type="text" placeholder="Contact Number" value={contactNumber} onChange={(e) => setContactNumber(e.target.value)} required className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3FC1C9]" />
-                            <input type="number" placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} required className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3FC1C9]" />
-                        </>
-                    )}
-                    <button type="submit" className="w-full bg-[#3FC1C9] hover:bg-[#32abb3] text-black font-semibold py-3 px-4 rounded-lg transition-all duration-300 shadow-md">
-                        Register
-                    </button>
-                </form>
-                <p className="text-center text-sm text-[#FC5185] mt-4">
-                    Already have an account? <a href="/login" className="underline">Login here</a>
-                </p>
+              </FormRow>
+
+              <FormInput id="name" label="Name:" value={name} setValue={setName} />
+              <FormInput id="email" label="Email:" type="email" value={email} setValue={setEmail} />
+
+              {role === "Manager" && (
+                <>
+                  <FormInput id="companyName" label="Company Name:" value={companyName} setValue={setCompanyName} />
+                  <FormInput id="companyDomain" label="Company Domain:" value={companyDomain} setValue={setCompanyDomain} />
+                </>
+              )}
             </div>
-        </div>
-    );
+
+            {/* Right Column */}
+            <div className="flex-1 space-y-4">
+              <FormInput id="password" label="Password:" type="password" value={password} setValue={setPassword} />
+              <FormInput id="confirmPassword" label="Confirm Password:" type="password" value={confirmPassword} setValue={setConfirmPassword} />
+
+              {role === "Manager" && (
+                <>
+                  <FormInput id="contactNumber" label="Contact Number:" value={contactNumber} setValue={setContactNumber} />
+                  <FormInput id="amount" label="Amount:" type="number" value={amount} setValue={setAmount} />
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className="flex justify-center mt-8">
+            <button
+              type="submit"
+              className="w-2/3 md:w-1/3 bg-[#8c6fb8e0] hover:bg-[#8c6fb8] text-black font-semibold py-3 px-4 rounded-lg transition-all duration-300 shadow-md"
+            >
+              Register
+            </button>
+          </div>
+        </form>
+
+        <p className="text-center text-sm text-[#FC5185] mt-4">
+          Already have an account? <a href="/login" className="underline">Login here</a>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// Reusable Components
+function FormRow({ label, htmlFor, children }) {
+  return (
+    <div className="flex flex-row items-center gap-4">
+      <label className="w-36 text-right font-semibold text-[#364F6B]" htmlFor={htmlFor}>
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+function FormInput({ id, label, value, setValue, type = "text" }) {
+  return (
+    <FormRow label={label} htmlFor={id}>
+      <input
+        id={id}
+        type={type}
+        placeholder={label.replace(":", "")}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        required
+        className="flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3FC1C9]"
+      />
+    </FormRow>
+  );
 }
 
 export default Registerpage;
