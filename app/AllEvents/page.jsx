@@ -64,8 +64,10 @@ const AllEvents = () => {
                   </video>
                 ) : (
                   e.videoUrl && (
-                    < img
+                    < Image
                       src={e.videoUrl}
+                      width={600}
+                      height={256}
                       alt="Event Visual"
                       className="w-full h-full object-cover rounded-none"
                     />
@@ -97,9 +99,9 @@ const AllEvents = () => {
                   </div>
                 </div>
                 <div className="mt-8 flex justify-end">
-                  <button 
+                  <button
                     className=" w-full bg-gradient-to-r from-[#7c4dff] to-[#9575cd] text-white font-bold py-2 px-6 rounded-xl shadow-lg hover:from-[#6a3fd8] hover:to-[#7e57c2] transition text-lg"
-                     onClick={() => router.push(`/chats?user=${e.userEmail}`)} >
+                    onClick={() => router.push(`/chats?user=${e.userEmail}`)} >
                     Contact
                   </button>
                 </div>

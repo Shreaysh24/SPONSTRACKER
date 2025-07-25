@@ -8,6 +8,7 @@ import {
   ImageKitAbortError,
 } from "@imagekit/next";
 import { useRef, useState } from "react";
+import Image from "next/image";
 
 const FileUpload = ({ onUploadComplete }) => {
   const fileInputRef = useRef(null);
@@ -100,9 +101,11 @@ const FileUpload = ({ onUploadComplete }) => {
       />
 
       {previewUrl && fileType === "image" && (
-        <img
+        <Image
           src={previewUrl}
           alt="Preview"
+          width={600}
+          height={256}
           className="w-full max-h-64 object-cover rounded-xl shadow-md"
         />
       )}

@@ -89,6 +89,8 @@ export default function Home() {
                     e.videoUrl && (
                       <Image
                         src={e.videoUrl}
+                        width={600}
+                        height={256}
                         alt="Event Visual"
                         className="w-full h-full object-cover rounded-none"
                       />
